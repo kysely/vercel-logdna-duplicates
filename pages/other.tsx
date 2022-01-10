@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import styles from "../styles/Home.module.css";
 
-export const Home = ({ randomValue }: { randomValue: number }) => {
+export const Home = ({ randomWord }: { randomWord: number }) => {
   return (
     <div className={styles.container}>
       <Head>
@@ -14,18 +14,18 @@ export const Home = ({ randomValue }: { randomValue: number }) => {
       </Head>
 
       <main className={styles.main}>
-        <h1 className={styles.title}>SSR Page</h1>
+        <h1 className={styles.title}>Another SSR Page</h1>
 
         <p className={styles.description}>
-          Random number returned from server side{" "}
-          <code className={styles.code}>{randomValue}</code>
+          Random word returned from server side{" "}
+          <code className={styles.code}>{randomWord}</code>
         </p>
 
         <div className={styles.grid}>
-          <Link href="/other">
+          <Link href="/">
             <a className={styles.card}>
-              <h2>Other Page &rarr;</h2>
-              <p>Link to another SSR page.</p>
+              <h2>&larr; Back to index</h2>
+              <p>Link to index SSR page.</p>
             </a>
           </Link>
         </div>
@@ -50,9 +50,11 @@ export const Home = ({ randomValue }: { randomValue: number }) => {
 export default Home;
 
 export const getServerSideProps: GetServerSideProps = async () => {
+  const WORDS = ["vercel", "is", "awesome", "except", "this", "issue :("];
+
   return {
     props: {
-      randomValue: Math.floor(Math.random() * 100),
+      randomWord: WORDS[Math.floor(Math.random() * WORDS.length)],
     },
   };
 };
