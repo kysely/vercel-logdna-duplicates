@@ -4,7 +4,13 @@ import Image from "next/image";
 import Link from "next/link";
 import styles from "../styles/Home.module.css";
 
-export const Home = ({ randomWord }: { randomWord: number }) => {
+export const CatchAllPage = ({
+  route,
+  randomValue,
+}: {
+  route: string;
+  randomValue: number;
+}) => {
   return (
     <div className={styles.container}>
       <Head>
@@ -14,18 +20,20 @@ export const Home = ({ randomWord }: { randomWord: number }) => {
       </Head>
 
       <main className={styles.main}>
-        <h1 className={styles.title}>Another SSR Page</h1>
+        <h1 className={styles.title}>SSR + Dynamic Route</h1>
 
         <p className={styles.description}>
-          Random word returned from server side{" "}
-          <code className={styles.code}>{randomWord}</code>
+          Handling actual route: <code className={styles.code}>{route}</code>
+          <br />
+          Random number returned from server side:{" "}
+          <code className={styles.code}>{randomValue}</code>
         </p>
 
         <div className={styles.grid}>
           <Link href="/">
             <a className={styles.card}>
-              <h2>&larr; Back to index</h2>
-              <p>Link to index SSR page.</p>
+              <h2>Dashboard &rarr;</h2>
+              <p>Link to index that redirects to Dashboard.</p>
             </a>
           </Link>
         </div>
@@ -47,14 +55,19 @@ export const Home = ({ randomWord }: { randomWord: number }) => {
   );
 };
 
-export default Home;
+export default CatchAllPage;
 
-export const getServerSideProps: GetServerSideProps = async () => {
-  const WORDS = ["vercel", "is", "awesome", "except", "this", "issue :("];
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const routeComponents = context.params?.catchAllRoute || "---";
 
   return {
     props: {
-      randomWord: WORDS[Math.floor(Math.random() * WORDS.length)],
+      route:
+        "/" +
+        (Array.isArray(routeComponents)
+          ? routeComponents.join("/")
+          : routeComponents),
+      randomValue: Math.floor(Math.random() * 1000),
     },
   };
 };
